@@ -32,7 +32,6 @@ const DuplicarMazo = () => { //"Barajar"
 
 //Creacion de la mano del primer jugador
 var manos = [];
-
 const repartir = () => {
   const mano = [];
   for (let i = 1; i <= 11; i++) {
@@ -65,35 +64,21 @@ const limpiarMano = () => {
   manos = [];
   barajado = [];
 }
-
-//Iniciar juego
-playGame.onclick = () => {
-  limpiarMano()
-  if (mazo.length < 1) {
-    CrearMazo();
-  }
-  DuplicarMazo();
-  repartir();
-  DarCartas();
-  //CartaMazo()
-};
 const CartaMazo = () => { //Pone la carta del revez en la pila del mazo para todas las manos
-  var totalJugadores = document.getElementById("Ingresar-jugadores")
-  totalJugadores = totalJugadores.value
-
   for (let i = 1; i < manos.length; i++) {
     revesContenedor = document.getElementById("espacio-"+(13*i));
     revesContenedor.innerHTML = "";
     revesContenedor.insertAdjacentHTML("beforeend", `<img src=${reves} alt=${reves} class="image">`)
   }
 }
+function totalJugadores() {
+  var totalJugadores = document.getElementById("Ingresar-jugadores")
+  return totalJugadores.value
+}
 CrearOtrasManos = () => {
   //Manos Lista que lista las cartas de cada mano
-
-  //Armar el resto de manos
-  var totalJugadores = document.getElementById("Ingresar-jugadores")
-  totalJugadores = totalJugadores.value
-  for (let i = 1; i < totalJugadores; i++) {
+  //Arma el resto de manos
+  for (let i = 1; i < totalJugadores(); i++) {
     const mano = [];
     for (let j = 1; j <= 10; j++) {
       mano.push(barajado[0]);
@@ -103,10 +88,8 @@ CrearOtrasManos = () => {
   }
 };
 OrganizarVista = () => {
-  //Organiza el resto de manos en su respectiva vista
-  var totalJugadores = document.getElementById("Ingresar-jugadores")
-  totalJugadores = totalJugadores.value
-  for (let i = 1; i < totalJugadores; i++) {
+  //Organiza el resto de manos en su respectivo card-holder
+  for (let i = 1; i < totalJugadores(); i++) {
     for (let j = 0; j < manos[i].length; j++) {
       const cartaRepartir = manos[i][j];
       const imagen =
@@ -125,9 +108,21 @@ OrganizarVista = () => {
     }
 }
 
-//Siguiente jugador --Arma otras manos y arregla las vistas de forma secuencial
-next.onclick = () => {
+//Iniciar juego
+playGame.onclick = () => {
+  limpiarMano()
+  if (mazo.length < 1) {
+    CrearMazo();
+  }
+  DuplicarMazo();
+  repartir();
+  DarCartas();
   CrearOtrasManos()
   OrganizarVista()
   CartaMazo()
+};
+
+//Siguiente jugador 
+next.onclick = () => { //Habilitar y desabilitar las vistas de jugador segun el turno.
+
 };
