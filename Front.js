@@ -99,7 +99,7 @@ OrganizarVista = () => {
         cartaRepartir.pinta +
         ".png";
       const contenedor = document.getElementById("espacio-" + (1+j+(i*13)));
-      //contenedor.innerHTML = "";
+      contenedor.innerHTML = "";
       contenedor.insertAdjacentHTML(
         "beforeend",
         `<img src=${imagen} alt=${imagen} class="image">`
@@ -111,6 +111,7 @@ OrganizarVista = () => {
 //Iniciar juego
 playGame.onclick = () => {
   limpiarMano()
+  QuitarVistaOtros()
   if (mazo.length < 1) {
     CrearMazo();
   }
@@ -120,9 +121,26 @@ playGame.onclick = () => {
   CrearOtrasManos()
   OrganizarVista()
   CartaMazo()
+  jugadorActual = 1;
+  document.getElementById("jugador-"+jugadorActual).style.display = "block";
+  QuitarVistaOtros()
 };
 
-//Siguiente jugador 
-next.onclick = () => { //Habilitar y desabilitar las vistas de jugador segun el turno.
-
+//Cambiar vista a siguiente jugador
+const QuitarVistaOtros = () => {
+  document.getElementById("jugador-2").style.display = "none"; 
+  document.getElementById("jugador-3").style.display = "none"; 
+  document.getElementById("jugador-4").style.display = "none"; 
+}
+var jugadorActual = 1;
+function CambiarVistaJugador() {
+  document.getElementById("jugador-"+jugadorActual).style.display = "none"; 
+  if (jugadorActual!==Number(totalJugadores())) {
+    jugadorActual = jugadorActual + 1;
+  } else {
+    jugadorActual = 1;
+  }
+  document.getElementById("jugador-"+jugadorActual).style.display = "block";
 };
+const SigJugador = document.getElementById("next");
+SigJugador.addEventListener("click", CambiarVistaJugador);
