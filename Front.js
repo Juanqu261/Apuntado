@@ -132,6 +132,7 @@ const QuitarVistaOtros = () => {
   document.getElementById("jugador-3").style.display = "none"; 
   document.getElementById("jugador-4").style.display = "none"; 
 }
+QuitarVistaOtros()
 var jugadorActual = 1;
 function CambiarVistaJugador() {
   document.getElementById("jugador-"+jugadorActual).style.display = "none"; 
