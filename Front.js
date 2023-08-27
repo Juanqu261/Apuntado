@@ -3,14 +3,23 @@ var mazo = [];
 var barajado = [];
 var manos = [];
 const pintas = ["clubs", "diamonds", "hearts", "spades"];
+let cartaSeleccionada; //carta que tiene el borde rojo
 
 //Carta del mazo-reves de la mano1
 const reves = "PNG-cards/back.png";
-var revesContenedor = document.getElementById("espacio-0");
+let revesContenedor = document.getElementById("espacio-0");
 revesContenedor.insertAdjacentHTML(
   "beforeend",
   `<img src=${reves} alt=${reves} class="image">`
 );
+revesContenedor.onclick = (e) => {
+  if (cartaSeleccionada){
+    cartaSeleccionada.style.border = ""
+  }
+  e.stopPropagation();
+  revesContenedor.style.border = "2px solid red";
+  cartaSeleccionada = revesContenedor;
+}
 
 const CrearMazo = () => {
   for (let i = 1; i <= 13; i++) {
@@ -35,66 +44,12 @@ const DuplicarMazo = () => {
   });
 };
 
-//Creacion de la mano del primer jugador
 const repartir = () => {
-  let mano = [];
-  for (let i = 1; i <= 11; i++) {
-    mano.push(barajado[0]);
-    barajado.shift();
-  }
-  manos.push(mano);
-};
-
-const DarCartas = () => {
-  for (let i = 0; i < manos.length; i++) {
-    for (let j = 0; j < manos[i].length; j++) {
-      const cartaRepartir = manos[i][j];
-      const imagen =
-        "PNG-cards/" +
-        cartaRepartir.numero +
-        "_of_" +
-        cartaRepartir.pinta +
-        ".png";
-
-      const contenedor = document.getElementById("espacio-" + (j + 1));
-      contenedor.innerHTML = "";
-      contenedor.insertAdjacentHTML(
-        "beforeend",
-        `<img src=${imagen} alt=${imagen} class="image">`
-      );
-    }
-  }
-};
-
-// cuando se reinicia el juego por completo
-const limpiarMano = () => {
-  mazo = [];
-  manos = [];
-  barajado = [];
-};
-
-const CartaMazo = () => {
-  //Pone la carta del revez en la pila del mazo para todas las manos
-  for (let i = 1; i < manos.length; i++) {
-    revesContenedor = document.getElementById("espacio-" + 13 * i);
-    revesContenedor.innerHTML = "";
-    revesContenedor.insertAdjacentHTML(
-      "beforeend",
-      `<img src=${reves} alt=${reves} class="image">`
-    );
-  }
-};
-function totalJugadores() {
-  var totalJugadores = document.getElementById("Ingresar-jugadores");
-  return totalJugadores.value;
-}
-
-CrearOtrasManos = () => {
-  //Manos Lista que lista las cartas de cada mano
-  //Arma el resto de manos
-  for (let i = 1; i < totalJugadores(); i++) {
+  //Arma las manos
+  for (let i = 0; i < totalJugadores(); i++) {
     let mano = [];
-    for (let j = 1; j <= 10; j++) {
+    let max = i === 0 ? 11 : 10;
+    for (let j = 1; j <= max; j++) {
       mano.push(barajado[0]);
       barajado.shift();
     }
@@ -102,9 +57,9 @@ CrearOtrasManos = () => {
   }
 };
 
-OrganizarVista = () => {
-  //Organiza el resto de manos en su respectivo card-holder
-  for (let i = 1; i < totalJugadores(); i++) {
+const OrganizarVista = () => {
+  //Organiza manos en su respectivo card-holder
+  for (let i = 0; i < totalJugadores(); i++) {
     for (let j = 0; j < manos[i].length; j++) {
       const cartaRepartir = manos[i][j];
       const imagen =
@@ -119,9 +74,50 @@ OrganizarVista = () => {
         "beforeend",
         `<img src=${imagen} alt=${imagen} class="image">`
       );
+      contenedor.onclick = (e) => {
+        if (cartaSeleccionada){
+          cartaSeleccionada.style.border = ""
+        }
+        e.stopPropagation();
+        contenedor.style.border = "2px solid red";
+        cartaSeleccionada = contenedor;
+      };
     }
   }
 };
+
+// cuando se reinicia el juego por completo
+const limpiarMano = () => {
+  mazo = [];
+  manos = [];
+  barajado = [];
+};
+
+const CartaMazo = () => {
+  //Pone la carta del revez en la pila del mazo para todas las manos
+  for (let i = 1; i < manos.length; i++) {
+    console.log("espacio-" + 13 * i);
+    const revesContenedor = document.getElementById("espacio-" + 13 * i);
+    revesContenedor.innerHTML = "";
+    revesContenedor.insertAdjacentHTML(
+      "beforeend",
+      `<img src=${reves} alt=${reves} class="image">`
+    );
+
+    revesContenedor.onclick = (e) => {
+      if (cartaSeleccionada){
+        cartaSeleccionada.style.border = ""
+      }
+      e.stopPropagation();
+      revesContenedor.style.border = "2px solid red";
+      cartaSeleccionada = revesContenedor;
+    }
+  }
+};
+function totalJugadores() {
+  var totalJugadores = document.getElementById("Ingresar-jugadores");
+  return totalJugadores.value;
+}
 
 //Iniciar juego
 playGame.onclick = () => {
@@ -132,8 +128,6 @@ playGame.onclick = () => {
   }
   DuplicarMazo();
   repartir();
-  DarCartas();
-  CrearOtrasManos();
   OrganizarVista();
   CartaMazo();
   jugadorActual = 1;
@@ -164,12 +158,3 @@ function CambiarVistaJugador() {
 
 const SigJugador = document.getElementById("next");
 SigJugador.addEventListener("click", CambiarVistaJugador);
-
-//---------------------------------------------------------------
-
-/*
-      contenedor.onclick = (e) => {
-        e.stopPropagation();
-        contenedor.style.border = "2px solid red";
-      };
-*/

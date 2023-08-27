@@ -21,10 +21,15 @@ main {
   height: 185px;
   margin: 10px;
   background-color: #ccc;
-  border: 1px dashed #aaa;
-  border-radius: 5px;
+  /* border: 1px dashed #aaa;
+  border-radius: 5px; */
   float: left;
 }
+
+.carta-soltada{
+  border: 5px solid blue;
+}
+
 .card-holder .image {
   width: 120px;
   height: 185px;
