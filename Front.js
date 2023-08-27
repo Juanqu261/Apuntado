@@ -13,13 +13,13 @@ revesContenedor.insertAdjacentHTML(
   `<img src=${reves} alt=${reves} class="image">`
 );
 revesContenedor.onclick = (e) => {
-  if (cartaSeleccionada){
-    cartaSeleccionada.style.border = ""
+  if (cartaSeleccionada) {
+    cartaSeleccionada.style.border = "";
   }
   e.stopPropagation();
   revesContenedor.style.border = "2px solid red";
   cartaSeleccionada = revesContenedor;
-}
+};
 
 const CrearMazo = () => {
   for (let i = 1; i <= 13; i++) {
@@ -61,6 +61,8 @@ const OrganizarVista = () => {
   //Organiza manos en su respectivo card-holder
   for (let i = 0; i < totalJugadores(); i++) {
     for (let j = 0; j < manos[i].length; j++) {
+      
+
       const cartaRepartir = manos[i][j];
       const imagen =
         "PNG-cards/" +
@@ -75,8 +77,8 @@ const OrganizarVista = () => {
         `<img src=${imagen} alt=${imagen} class="image">`
       );
       contenedor.onclick = (e) => {
-        if (cartaSeleccionada){
-          cartaSeleccionada.style.border = ""
+        if (cartaSeleccionada) {
+          cartaSeleccionada.style.border = "";
         }
         e.stopPropagation();
         contenedor.style.border = "2px solid red";
@@ -105,13 +107,13 @@ const CartaMazo = () => {
     );
 
     revesContenedor.onclick = (e) => {
-      if (cartaSeleccionada){
-        cartaSeleccionada.style.border = ""
+      if (cartaSeleccionada) {
+        cartaSeleccionada.style.border = "";
       }
       e.stopPropagation();
       revesContenedor.style.border = "2px solid red";
       cartaSeleccionada = revesContenedor;
-    }
+    };
   }
 };
 function totalJugadores() {
@@ -158,3 +160,22 @@ function CambiarVistaJugador() {
 
 const SigJugador = document.getElementById("next");
 SigJugador.addEventListener("click", CambiarVistaJugador);
+
+//----------------------------------
+
+/*
+4 jugadores -> 0, 1, 2, 3
+El jugador 0 puede tomar la carta soltada por el juagdor 3
+El jugador 1 puede tomar la carta soltada por el juagdor 0
+El jugador 2 puede tomar la carta soltada por el juagdor 1
+El jugador 3 puede tomar la carta soltada por el juagdor 2
+*/
+let cartaSoltadaJugador0 = document.getElementById("espacio-12");
+let cartaSoltadaJugador1 = document.getElementById("espacio-25");
+let cartaSoltadaJugador2 = document.getElementById("espacio-38");
+let cartaSoltadaJugador3 = document.getElementById("espacio-21");
+cartasSoltadas = [];
+
+function uptadeCartasSoltadas(){
+
+}
