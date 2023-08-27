@@ -1,7 +1,7 @@
 //Creacion del mazo
-var mazo = [];
-var barajado = [];
-var manos = [];
+let mazo = [];
+let barajado = [];
+let manos = [];
 const pintas = ["clubs", "diamonds", "hearts", "spades"];
 let cartaSeleccionada; //carta que tiene el borde rojo
 let cartasSoltadas = document.getElementsByClassName("cartas-soltada");
@@ -209,10 +209,10 @@ let cartaSoltadaJugador3 = document.getElementById("espacio-21");
 let imgsCartasSoltadas = [];
 let cartasSeleccionadas = [];
 
-espaciosSoltar = document.getElementsByClassName("soltar");
+divEspaciosSoltar = document.getElementsByClassName("soltar");
 
-for (let espacio = 0; espacio < espaciosSoltar.length; espacio++) {
-  const element = espaciosSoltar[espacio];
+for (let espacio = 0; espacio < divEspaciosSoltar.length; espacio++) {
+  const element = divEspaciosSoltar[espacio];
   element.onclick = (e) => {
     e.stopPropagation();
     // si la carta seleccionada existe y no es volteada
@@ -221,25 +221,33 @@ for (let espacio = 0; espacio < espaciosSoltar.length; espacio++) {
       !cartaSeleccionada.classList.contains("cartas-volteadas")
     ) {
       imgsCartasSoltadas[espacio] = cartaSeleccionada.firstChild;
-
-      cartasSeleccionadas[espacio] = {
+      cartaPuestaEnEspacioSoltar = {
         numero: Number(cartaSeleccionada.dataset.numero),
         pinta: cartaSeleccionada.dataset.tipo,
         img: cartaSeleccionada.dataset.img,
       };
 
-      manos[espacio].every((element) => {
-        cartasSeleccionadas.forEach((element2) => {
-          if (
-            Object.values(element).toString() ==
-            Object.values(element2).toString()
-          ) {
-            console.log("Eliminado");
-            delete manos[espacio][manos[espacio].indexOf(element)];
-            return true; //para parar de mirar
-          }
-        });
-      });
+      for (let i = 0; i < manos[espacio].length; i++) {
+        let mano = manos[espacio][i];
+        if (
+          Object.values(mano).toString() ==
+          Object.values(cartaPuestaEnEspacioSoltar).toString()
+        ) {
+          console.log("Eliminado", espacio, i);
+          removeItemOnce(manos[espacio], manos[espacio][i]);
+          break;
+        } else {
+          console.log("continua");
+        }
+      }
     }
   };
+}
+
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
 }
