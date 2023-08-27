@@ -1,6 +1,7 @@
 //Creacion del mazo
 var mazo = [];
 var barajado = [];
+var manos = [];
 const pintas = ["clubs", "diamonds", "hearts", "spades"];
 
 //Carta del mazo-reves de la mano1
@@ -35,15 +36,15 @@ const DuplicarMazo = () => {
 };
 
 //Creacion de la mano del primer jugador
-var manos = [];
 const repartir = () => {
-  const mano = [];
+  let mano = [];
   for (let i = 1; i <= 11; i++) {
     mano.push(barajado[0]);
     barajado.shift();
   }
   manos.push(mano);
 };
+
 const DarCartas = () => {
   for (let i = 0; i < manos.length; i++) {
     for (let j = 0; j < manos[i].length; j++) {
@@ -54,6 +55,7 @@ const DarCartas = () => {
         "_of_" +
         cartaRepartir.pinta +
         ".png";
+
       const contenedor = document.getElementById("espacio-" + (j + 1));
       contenedor.innerHTML = "";
       contenedor.insertAdjacentHTML(
@@ -63,11 +65,14 @@ const DarCartas = () => {
     }
   }
 };
+
+// cuando se reinicia el juego por completo
 const limpiarMano = () => {
   mazo = [];
   manos = [];
   barajado = [];
 };
+
 const CartaMazo = () => {
   //Pone la carta del revez en la pila del mazo para todas las manos
   for (let i = 1; i < manos.length; i++) {
@@ -83,11 +88,12 @@ function totalJugadores() {
   var totalJugadores = document.getElementById("Ingresar-jugadores");
   return totalJugadores.value;
 }
+
 CrearOtrasManos = () => {
   //Manos Lista que lista las cartas de cada mano
   //Arma el resto de manos
   for (let i = 1; i < totalJugadores(); i++) {
-    const mano = [];
+    let mano = [];
     for (let j = 1; j <= 10; j++) {
       mano.push(barajado[0]);
       barajado.shift();
@@ -95,6 +101,7 @@ CrearOtrasManos = () => {
     manos.push(mano);
   }
 };
+
 OrganizarVista = () => {
   //Organiza el resto de manos en su respectivo card-holder
   for (let i = 1; i < totalJugadores(); i++) {
@@ -142,7 +149,8 @@ const QuitarVistaOtros = () => {
 };
 
 QuitarVistaOtros();
-var jugadorActual = 1;
+
+let jugadorActual = 1;
 
 function CambiarVistaJugador() {
   document.getElementById("jugador-" + jugadorActual).style.display = "none";
@@ -156,3 +164,12 @@ function CambiarVistaJugador() {
 
 const SigJugador = document.getElementById("next");
 SigJugador.addEventListener("click", CambiarVistaJugador);
+
+//---------------------------------------------------------------
+
+/*
+      contenedor.onclick = (e) => {
+        e.stopPropagation();
+        contenedor.style.border = "2px solid red";
+      };
+*/
