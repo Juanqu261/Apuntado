@@ -4,6 +4,7 @@ var barajado = [];
 var manos = [];
 const pintas = ["clubs", "diamonds", "hearts", "spades"];
 let cartaSeleccionada; //carta que tiene el borde rojo
+let cartasSoltadas = document.getElementsByClassName("cartas-soltada");
 
 //Carta del mazo-reves de la mano1
 const reves = "PNG-cards/back.png";
@@ -70,14 +71,17 @@ const OrganizarVista = () => {
         cartaRepartir.pinta +
         ".png";
       imagen.src = rutaCarta;
-      imagen.className += "image"
+      imagen.className += "image";
 
       const contenedor = document.getElementById("espacio-" + (1 + j + i * 13));
       contenedor.dataset.numero = cartaRepartir.numero;
       contenedor.dataset.tipo = cartaRepartir.pinta;
       contenedor.dataset.img = cartaRepartir.img;
 
-      if (cartaRepartir.pinta === "hearts" || cartaRepartir.pinta === "diamonds"){
+      if (
+        cartaRepartir.pinta === "hearts" ||
+        cartaRepartir.pinta === "diamonds"
+      ) {
         contenedor.dataset.color = "rojo";
       } else {
         contenedor.dataset.color = "negro";
@@ -111,7 +115,6 @@ const limpiarMano = () => {
 const CartaMazo = () => {
   //Pone la carta del revez en la pila del mazo para todas las manos
   for (let i = 1; i < manos.length; i++) {
-    console.log("espacio-" + 13 * i);
     const revesContenedor = document.getElementById("espacio-" + 13 * i);
     revesContenedor.innerHTML = "";
     revesContenedor.insertAdjacentHTML(
@@ -159,16 +162,31 @@ const QuitarVistaOtros = () => {
 
 QuitarVistaOtros();
 
-let jugadorActual = 1;
+let jugadorActual = 1; // 1, 2, 3, 4
 
 function CambiarVistaJugador() {
   document.getElementById("jugador-" + jugadorActual).style.display = "none";
   if (jugadorActual !== Number(totalJugadores())) {
+    if (cartasSoltadas[jugadorActual].firstChild) {
+      //Para la primera iteracion, verifica que exista algo antes
+      cartasSoltadas[jugadorActual].removeChild(
+        cartasSoltadas[jugadorActual].firstChild
+      );
+    }
+    cartasSoltadas[jugadorActual].appendChild(
+      imgsCartasSoltadas[jugadorActual - 1]
+    );
     jugadorActual = jugadorActual + 1;
   } else {
     jugadorActual = 1;
+    cartasSoltadas[0].removeChild(cartasSoltadas[0].firstChild);
+    cartasSoltadas[0].appendChild(
+      imgsCartasSoltadas[imgsCartasSoltadas.length - 1]
+    );
   }
   document.getElementById("jugador-" + jugadorActual).style.display = "block";
+
+  // agrego la carta dejada por el anterior jugador
 }
 
 const SigJugador = document.getElementById("next");
@@ -187,7 +205,41 @@ let cartaSoltadaJugador0 = document.getElementById("espacio-12");
 let cartaSoltadaJugador1 = document.getElementById("espacio-25");
 let cartaSoltadaJugador2 = document.getElementById("espacio-38");
 let cartaSoltadaJugador3 = document.getElementById("espacio-21");
-// ejemplo cartaSoltadaJugador3.dataset.tipo 
-cartasSoltadas = [];
+// ejemplo cartaSoltadaJugador3.dataset.tipo
+let imgsCartasSoltadas = [];
+let cartasSeleccionadas = [];
 
-function uptadeCartasSoltadas() {}
+espaciosSoltar = document.getElementsByClassName("soltar");
+
+for (let espacio = 0; espacio < espaciosSoltar.length; espacio++) {
+  const element = espaciosSoltar[espacio];
+  element.onclick = (e) => {
+    e.stopPropagation();
+    // si la carta seleccionada existe y no es volteada
+    if (
+      cartaSeleccionada &&
+      !cartaSeleccionada.classList.contains("cartas-volteadas")
+    ) {
+      imgsCartasSoltadas[espacio] = cartaSeleccionada.firstChild;
+
+      cartasSeleccionadas[espacio] = {
+        numero: Number(cartaSeleccionada.dataset.numero),
+        pinta: cartaSeleccionada.dataset.tipo,
+        img: cartaSeleccionada.dataset.img,
+      };
+
+      manos[espacio].every((element) => {
+        cartasSeleccionadas.forEach((element2) => {
+          if (
+            Object.values(element).toString() ==
+            Object.values(element2).toString()
+          ) {
+            console.log("Eliminado");
+            delete manos[espacio][manos[espacio].indexOf(element)];
+            return true; //para parar de mirar
+          }
+        });
+      });
+    }
+  };
+}
