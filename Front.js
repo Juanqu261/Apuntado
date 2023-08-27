@@ -6,7 +6,10 @@ const pintas = ["clubs", "diamonds", "hearts", "spades"];
 //Carta del mazo-reves de la mano1
 const reves = "PNG-cards/back.png";
 var revesContenedor = document.getElementById("espacio-0");
-revesContenedor.insertAdjacentHTML("beforeend", `<img src=${reves} alt=${reves} class="image">`)
+revesContenedor.insertAdjacentHTML(
+  "beforeend",
+  `<img src=${reves} alt=${reves} class="image">`
+);
 
 const CrearMazo = () => {
   for (let i = 1; i <= 13; i++) {
@@ -21,7 +24,8 @@ const CrearMazo = () => {
     }
   }
 };
-const DuplicarMazo = () => { //"Barajar"
+const DuplicarMazo = () => {
+  //"Barajar"
   for (let i = 0; i < mazo.length; i++) {
     barajado.push(mazo[i]);
   }
@@ -40,7 +44,7 @@ const repartir = () => {
   }
   manos.push(mano);
 };
-const DarCartas = () => { 
+const DarCartas = () => {
   for (let i = 0; i < manos.length; i++) {
     for (let j = 0; j < manos[i].length; j++) {
       const cartaRepartir = manos[i][j];
@@ -50,30 +54,34 @@ const DarCartas = () => {
         "_of_" +
         cartaRepartir.pinta +
         ".png";
-      const contenedor = document.getElementById("espacio-" + (j+1));
+      const contenedor = document.getElementById("espacio-" + (j + 1));
       contenedor.innerHTML = "";
       contenedor.insertAdjacentHTML(
         "beforeend",
         `<img src=${imagen} alt=${imagen} class="image">`
-        )
-      }
+      );
     }
+  }
 };
 const limpiarMano = () => {
   mazo = [];
   manos = [];
   barajado = [];
-}
-const CartaMazo = () => { //Pone la carta del revez en la pila del mazo para todas las manos
+};
+const CartaMazo = () => {
+  //Pone la carta del revez en la pila del mazo para todas las manos
   for (let i = 1; i < manos.length; i++) {
-    revesContenedor = document.getElementById("espacio-"+(13*i));
+    revesContenedor = document.getElementById("espacio-" + 13 * i);
     revesContenedor.innerHTML = "";
-    revesContenedor.insertAdjacentHTML("beforeend", `<img src=${reves} alt=${reves} class="image">`)
+    revesContenedor.insertAdjacentHTML(
+      "beforeend",
+      `<img src=${reves} alt=${reves} class="image">`
+    );
   }
-}
+};
 function totalJugadores() {
-  var totalJugadores = document.getElementById("Ingresar-jugadores")
-  return totalJugadores.value
+  var totalJugadores = document.getElementById("Ingresar-jugadores");
+  return totalJugadores.value;
 }
 CrearOtrasManos = () => {
   //Manos Lista que lista las cartas de cada mano
@@ -83,8 +91,8 @@ CrearOtrasManos = () => {
     for (let j = 1; j <= 10; j++) {
       mano.push(barajado[0]);
       barajado.shift();
-  }
-  manos.push(mano);
+    }
+    manos.push(mano);
   }
 };
 OrganizarVista = () => {
@@ -98,50 +106,53 @@ OrganizarVista = () => {
         "_of_" +
         cartaRepartir.pinta +
         ".png";
-      const contenedor = document.getElementById("espacio-" + (1+j+(i*13)));
+      const contenedor = document.getElementById("espacio-" + (1 + j + i * 13));
       contenedor.innerHTML = "";
       contenedor.insertAdjacentHTML(
         "beforeend",
         `<img src=${imagen} alt=${imagen} class="image">`
-        )
-      }
+      );
     }
-}
+  }
+};
 
 //Iniciar juego
 playGame.onclick = () => {
-  limpiarMano()
-  QuitarVistaOtros()
+  limpiarMano();
+  QuitarVistaOtros();
   if (mazo.length < 1) {
     CrearMazo();
   }
   DuplicarMazo();
   repartir();
   DarCartas();
-  CrearOtrasManos()
-  OrganizarVista()
-  CartaMazo()
+  CrearOtrasManos();
+  OrganizarVista();
+  CartaMazo();
   jugadorActual = 1;
-  document.getElementById("jugador-"+jugadorActual).style.display = "block";
-  QuitarVistaOtros()
+  document.getElementById("jugador-" + jugadorActual).style.display = "block";
+  QuitarVistaOtros();
 };
 
 //Cambiar vista a siguiente jugador
 const QuitarVistaOtros = () => {
-  document.getElementById("jugador-2").style.display = "none"; 
-  document.getElementById("jugador-3").style.display = "none"; 
-  document.getElementById("jugador-4").style.display = "none"; 
-}
-QuitarVistaOtros()
+  document.getElementById("jugador-2").style.display = "none";
+  document.getElementById("jugador-3").style.display = "none";
+  document.getElementById("jugador-4").style.display = "none";
+};
+
+QuitarVistaOtros();
 var jugadorActual = 1;
+
 function CambiarVistaJugador() {
-  document.getElementById("jugador-"+jugadorActual).style.display = "none"; 
-  if (jugadorActual!==Number(totalJugadores())) {
+  document.getElementById("jugador-" + jugadorActual).style.display = "none";
+  if (jugadorActual !== Number(totalJugadores())) {
     jugadorActual = jugadorActual + 1;
   } else {
     jugadorActual = 1;
   }
-  document.getElementById("jugador-"+jugadorActual).style.display = "block";
-};
+  document.getElementById("jugador-" + jugadorActual).style.display = "block";
+}
+
 const SigJugador = document.getElementById("next");
 SigJugador.addEventListener("click", CambiarVistaJugador);
