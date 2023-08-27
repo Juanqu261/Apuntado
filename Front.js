@@ -61,21 +61,34 @@ const OrganizarVista = () => {
   //Organiza manos en su respectivo card-holder
   for (let i = 0; i < totalJugadores(); i++) {
     for (let j = 0; j < manos[i].length; j++) {
-      
-
+      const imagen = document.createElement("img");
       const cartaRepartir = manos[i][j];
-      const imagen =
+      const rutaCarta =
         "PNG-cards/" +
         cartaRepartir.numero +
         "_of_" +
         cartaRepartir.pinta +
         ".png";
+      imagen.src = rutaCarta;
+      imagen.className += "image"
+
       const contenedor = document.getElementById("espacio-" + (1 + j + i * 13));
-      contenedor.innerHTML = "";
-      contenedor.insertAdjacentHTML(
-        "beforeend",
-        `<img src=${imagen} alt=${imagen} class="image">`
-      );
+      contenedor.dataset.numero = cartaRepartir.numero;
+      contenedor.dataset.tipo = cartaRepartir.pinta;
+      contenedor.dataset.img = cartaRepartir.img;
+
+      if (cartaRepartir.pinta === "hearts" || cartaRepartir.pinta === "diamonds"){
+        contenedor.dataset.color = "rojo";
+      } else {
+        contenedor.dataset.color = "negro";
+      }
+
+      // contenedor.innerHTML = "";
+      contenedor.appendChild(imagen);
+      // contenedor.insertAdjacentHTML(
+      //   "beforeend",
+      //   `<img src=${rutaCarta} alt=${rutaCarta} class="image">`
+      // );
       contenedor.onclick = (e) => {
         if (cartaSeleccionada) {
           cartaSeleccionada.style.border = "";
@@ -174,8 +187,7 @@ let cartaSoltadaJugador0 = document.getElementById("espacio-12");
 let cartaSoltadaJugador1 = document.getElementById("espacio-25");
 let cartaSoltadaJugador2 = document.getElementById("espacio-38");
 let cartaSoltadaJugador3 = document.getElementById("espacio-21");
+// ejemplo cartaSoltadaJugador3.dataset.tipo 
 cartasSoltadas = [];
 
-function uptadeCartasSoltadas(){
-
-}
+function uptadeCartasSoltadas() {}
